@@ -29,7 +29,7 @@
 
 LINE="----------------------------------------------------------------------"
 # Use the canonical git repo by default
-XRDPGIT=https://github.com/neutrinolabs/xrdp.git
+XRDPGIT=https://github.com/nerdknight/xrdp.git
 # Use the master branch by default
 XRDPBRANCH=master
 
