@@ -1,7 +1,13 @@
 #!/bin/sh
-
-# create the rc.d calls for startup/shutdown...
-update-rc.d xrdp defaults
-# Crank the engine ;)
-/etc/init.d/xrdp start
+RELEASE=`lsb_release -rs`
+if [ "$RELEASE" = "16.04" ]; then
+  systemctl daemon-reload
+  systemctl enable xrdp
+  systemctl start xrdp
+else
+  # create the rc.d calls for startup/shutdown...
+  update-rc.d xrdp defaults
+  # Crank the engine ;)
+  /etc/init.d/xrdp start
+fi
 exit 0

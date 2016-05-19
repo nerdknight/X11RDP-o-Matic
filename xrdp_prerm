@@ -1,4 +1,10 @@
 #!/bin/sh
-/etc/init.d/xrdp stop
-update-rc.d xrdp remove
+RELEASE=`lsb_release -rs`
+if [ "$RELEASE" = "16.04" ]; then
+  systemctl stop xrdp
+  systemctl daemon-reload
+else
+  /etc/init.d/xrdp stop
+  update-rc.d xrdp remove
+fi
 exit 0

@@ -140,6 +140,8 @@ libgl1-mesa-dev libxkbfile-dev libxfont-dev libpciaccess-dev dh-make gettext
 xfonts-utils)
 
 DIST=`lsb_release -d -s`
+DIST_REL=$(lsb_release -rs)
+
 
 # Check for running on supported/tested Distros...
 SUPPORTED=0
@@ -422,7 +424,7 @@ compile_xrdp_interactive()
   cd xrdp-$VERSION;
   
   #Step 3 : Use dh-make to create the debian directory package template...
-  ( echo | dh_make --single --native ) 2>&1 | dialog  --progressbox "Preparing xrdp source to make a Debian package..." 50 100
+  ( dh_make --single --native -y) 2>&1 | dialog  --progressbox "Preparing xrdp source to make a Debian package..." 50 100
   
   #Step 4 : edit/configure the debian directory...
   cd debian
@@ -465,7 +467,7 @@ compile_xrdp_noninteractive()
   cd xrdp-$VERSION
   
   #Step 3 : Use dh-make to create the debian directory package template...
-  echo | dh_make --single --native
+  dh_make --single --native -y
   
   #Step 4 : edit/configure the debian directory...
   cd debian
@@ -653,13 +655,15 @@ make_X11rdp_env()
 # Also patch rdp Makefile to tell Ubuntu linker to include GL symbols - pesky Ubuntu...
 alter_xrdp_source()
 {
-  cd $WORKINGDIR/xrdp
-  for file in `rgrep "localstatedir\}" . | cut -d":" -f1`
-  do
-    sed 's/localstatedir\}\/run/localstatedir\}\/run\/xrdp/' < $file > $file.new
-    rm $file
-    mv $file.new $file
-  done
+  if [ "$DIST_REL" != "16.04" ]; then
+    cd $WORKINGDIR/xrdp
+    for file in `rgrep "localstatedir\}" . | cut -d":" -f1`
+    do
+      sed 's/localstatedir\}\/run/localstatedir\}\/run\/xrdp/' < $file > $file.new
+      rm $file
+      mv $file.new $file
+    done
+  fi
   cd $WORKINGDIR
   # Patch Jay's buildx.sh.
   # This will patch the make command for parallel makes if that was requested,
