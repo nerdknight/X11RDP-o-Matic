@@ -424,8 +424,11 @@ compile_xrdp_interactive()
   cd xrdp-$VERSION;
   
   #Step 3 : Use dh-make to create the debian directory package template...
-  ( dh_make --single --native -y) 2>&1 | dialog  --progressbox "Preparing xrdp source to make a Debian package..." 50 100
-  
+  if [ "$DIST_REL" != "16.04" ]; then
+    ( echo | dh_make --single --native ) 2>&1 | dialog  --progressbox "Preparing xrdp source to make a Debian package..." 50 100
+  else
+    ( dh_make --single --native -y) 2>&1 | dialog  --progressbox "Preparing xrdp source to make a Debian package..." 50 100
+  fi
   #Step 4 : edit/configure the debian directory...
   cd debian
   rm *.ex *.EX # remove the example templates
@@ -467,8 +470,11 @@ compile_xrdp_noninteractive()
   cd xrdp-$VERSION
   
   #Step 3 : Use dh-make to create the debian directory package template...
-  dh_make --single --native -y
-  
+  if [ "$DIST_REL" != "16.04" ]; then
+    echo | dh_make --single --native
+  else
+    dh_make --single --native -y
+  fi
   #Step 4 : edit/configure the debian directory...
   cd debian
   rm *.ex *.EX # remove the example templates
