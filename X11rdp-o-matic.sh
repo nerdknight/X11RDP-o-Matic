@@ -251,7 +251,7 @@ case "$1" in
     fi
     XRDPBRANCH="$2"
     echo "Using branch ==>> $2 <<=="
-    if [ "$XRDPBRANCH" = "devel" ]
+    if [ "$XRDPBRANCH" = "devel" -o "$XRDPBRANCH" = "devel-st" ]
     then
       echo "Note : using the bleeding-edge version may result in problems :)"
       BLEED=true
@@ -678,7 +678,7 @@ welcome_message()
 # Worked out from the chosen branch.
 calculate_version_num()
 {
-  README="https://raw.github.com/neutrinolabs/xrdp/$XRDPBRANCH/readme.txt"
+  README="https://raw.github.com/nerdknight/xrdp/$XRDPBRANCH/readme.txt"
   wget --no-check-certificate -O "$TMPFILE" "$README" >& /dev/null
   VERSION=$(grep xrdp "$TMPFILE" | head -1 | cut -d " " -f2)
   rm -f "$TMPFILE"
